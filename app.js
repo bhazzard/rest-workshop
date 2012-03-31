@@ -1,43 +1,43 @@
 var express = require('express'),
     app = express.createServer(),
-    accept = require('./middleware/accept');
+    conneg = require('./middleware').conneg([
+        'application/vnd.com.emailsrvr.mailbox-v1'
+    ]),
+    accept = conneg.accept,
+    contentTypes = conneg.contentTypes;
     
 var start = function(db, port) {
     app.use(express.bodyParser());
     
-    app.get('/', function(req, res) {
-        res.send('Welcome to our service');
-    });
-    
-    app.get('/mailboxes', function(req, res){
+    app.get('/mailboxes/:id', function(req, res){
         db.collection('mailboxes', function(err, collection) {
-            collection.find().toArray(function(err, mailboxes) {
-                res.send(mailboxes, 200);
+            collection.findOne({'_id': req.params.id} , function(err, mailbox) {
+                res.render(conneg.contentType(mailbox, 'application/vnd.com.emailsrvr.mailbox-v1').toHTML(), 200);
             });
         });
     });
     
     app.post('/mailboxes', accept(['application/vnd.com.emailsrvr.mailbox-v1']), function(req, res) {
-        db.collection('mailboxes', function(err, ideas) {
+        db.collection('mailboxes', function(err, mailboxes) {
             if (err) {
                 res.send("Problem with ideas collection!", 500);
                 return;
             }
             
-            ideas.insert(req.body);
+            mailboxes.insert(req.form.data);
             
             res.send("Thank you for your feedback!", 200);
         });
     });
     
     app.delete('/mailboxes', function(req, res) {
-        db.collection('mailboxes', function(err, ideas) {
+        db.collection('mailboxes', function(err, mailboxes) {
             if (err) {
                 res.send("Problem with ideas collection!", 500);
                 return;
             }
             
-            ideas.remove();
+            mailboxes.remove();
             
             res.send("Why'd you delete that?", 200);
         });
