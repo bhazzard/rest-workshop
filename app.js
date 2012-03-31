@@ -1,24 +1,24 @@
 var express = require('express'),
-    app = express.createServer();
+    app = express.createServer(),
+    accept = require('./middleware/accept');
     
 var start = function(db, port) {
     app.use(express.bodyParser());
     
-    app.get('/ideas', function(req, res){
-        db.collection('ideas', function(err, collection) {
-            if (err) {
-                res.send("Problem with ideas collection!", 500);
-                return;
-            }
-            
-            collection.find().toArray(function(err, items) {
-                res.send(items, 200);
+    app.get('/', function(req, res) {
+        res.send('Welcome to our service');
+    });
+    
+    app.get('/mailboxes', function(req, res){
+        db.collection('mailboxes', function(err, collection) {
+            collection.find().toArray(function(err, mailboxes) {
+                res.send(mailboxes, 200);
             });
         });
     });
     
-    app.post('/ideas', function(req, res) {
-        db.collection('ideas', function(err, ideas) {
+    app.post('/mailboxes', accept(['application/vnd.com.emailsrvr.mailbox-v1']), function(req, res) {
+        db.collection('mailboxes', function(err, ideas) {
             if (err) {
                 res.send("Problem with ideas collection!", 500);
                 return;
@@ -30,8 +30,8 @@ var start = function(db, port) {
         });
     });
     
-    app.delete('/ideas', function(req, res) {
-        db.collection('ideas', function(err, ideas) {
+    app.delete('/mailboxes', function(req, res) {
+        db.collection('mailboxes', function(err, ideas) {
             if (err) {
                 res.send("Problem with ideas collection!", 500);
                 return;
