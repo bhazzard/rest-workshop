@@ -1,12 +1,9 @@
 {
-    "name": "feedback",
+    "name": "rest-workshop",
     "version": "0.0.0",
     "dependencies": {
         "express": "*",
-        "mongodb": "*",
-        "forms": "*",
-        "underscore":"*",
-        "should": "*",
-        "mocha": "*"
+        "mongoose": "*",
+        "underscore":"*"
     }
 }
