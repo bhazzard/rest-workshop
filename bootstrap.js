@@ -1,8 +1,10 @@
-var db = require('./db'),
-    app = require('./app');
-    
-db.connect(function(err, db_connection) {
-    if (err) throw err;
-    
-    app.start(db_connection, process.env.PORT);
+var endpoint = require('./endpoint');
+
+endpoint('/', function() {
+   this.resource('contacts', function() {
+       this.allowPost('contact', function(contactlist, person) {
+           contactlist.contacts.push(person);
+           this.save(contactlist);
+       });
+   });
 });

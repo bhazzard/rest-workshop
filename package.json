@@ -5,6 +5,8 @@
         "express": "*",
         "mongodb": "*",
         "forms": "*",
-        "underscore":"*"
+        "underscore":"*",
+        "should": "*",
+        "mocha": "*"
     }
 }
