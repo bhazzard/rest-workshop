@@ -20,10 +20,6 @@ app.post('/register', function(req, res) {
     });
 });
 
-app.post('/message', function(req, res) {
-    
-});
-
 app.get('/users/:id', function(req, res) {
     User.findOne({_id: req.params.id}, function(err, user) {
        if (err) return res.send(err, 404);
