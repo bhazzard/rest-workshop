@@ -15,14 +15,9 @@ PostSchema.pre('save', function(next) {
     this.topics = this.message.match(/#(\w+)/gi);
     next();
 });
-/*
+
 PostSchema.pre('save', function(next) {
     this.mentions = this.message.match(/@(\w+)/gi);
-    next();
-});
-*/
-PostSchema.pre('save', function(next) {
-    this.domain = this.user.split('@')[1];
     next();
 });
 
